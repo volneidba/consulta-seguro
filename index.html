@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Assistente de Seguro - Peleca IA</title>
+</head>
+<body style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 2rem;">
+  <h1>🤖 Assistente de Seguro</h1>
+  <p>Olá! Sou a Peleca, sua assistente virtual. Posso te ajudar a entender seu seguro com base nos documentos fornecidos. Me mande uma pergunta! ✨</p>
+
+  <textarea id="userInput" rows="4" style="width: 100%;" placeholder="Digite sua pergunta..."></textarea><br><br>
+  <button onclick="enviarPergunta()">Enviar</button>
+
+  <h2>Resposta:</h2>
+  <div id="resposta" style="white-space: pre-wrap; background: #f4f4f4; padding: 1rem; border-radius: 5px;"></div>
+
+  <script>
+    async function enviarPergunta() {
+      const userInput = document.getElementById('userInput').value;
+      const respostaDiv = document.getElementById('resposta');
+
+      const url = "https://6c5d-2804-7f0-77c0-ae8-203f-b34a-480f-36ee.ngrok-free.app/api/v1/run/691c0182-ae61-4b91-b221-d1eb7b51602f";
+
+      const payload = {
+        input_value: userInput,
+        output_type: "chat",
+        input_type: "chat"
+      };
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          throw new Error("Erro na requisição: " + response.status);
+        }
+
+        const data = await response.json();
+        respostaDiv.innerText = data.output || "Nenhuma resposta recebida.";
+      } catch (error) {
+        respostaDiv.innerText = "Erro: " + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
